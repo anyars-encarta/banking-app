@@ -6,7 +6,7 @@ const TotalBalanceBox = ({ accounts = [], totalBanks, totalCurrentBalance }: Tot
     return (
         <section className='total-balance'>
             <div className='total-balance-chart'>
-                {/* DoughnutChart */}
+            <Doughnut data={} />
 
             </div>
 
