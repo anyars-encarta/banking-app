@@ -12,10 +12,11 @@ interface CustomFormField {
     name: FieldPath<z.infer<typeof formSchema>>,
     label: string,
     placeholder: string,
-    type: string
+    type: string,
+    id: string
 };
 
-const CustomFormField = ({ control, label, placeholder, name, type}: CustomFormField) => {
+const CustomFormField = ({ control, label, placeholder, name, type, id}: CustomFormField) => {
     return (
         <FormField
             control={control}
@@ -32,6 +33,7 @@ const CustomFormField = ({ control, label, placeholder, name, type}: CustomFormF
                                 className='input-class'
                                 {...field}
                                 type={type}
+                                id={id}
                             />
                         </FormControl>
                         <FormMessage className='form-message mt-2' />
