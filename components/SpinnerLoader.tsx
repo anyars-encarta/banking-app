@@ -1,10 +1,9 @@
-import { Loader2 } from 'lucide-react'
-import React from 'react'
+import { Loader } from 'lucide-react'
 
 const SpinnerLoader = ({type}: {type: string}) => {
   return (
-    <div>
-        <Loader2 className='animate-spin' /> 
+    <div className='flex gap-2'>
+        <Loader className='animate-spin' /> 
         {type === 'sign-in' ? 'Signing in...' : 'Signing up...'}
     </div>
   )

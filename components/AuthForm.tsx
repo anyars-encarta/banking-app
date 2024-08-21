@@ -10,16 +10,16 @@ import { Form } from "@/components/ui/form"
 import { useForm } from "react-hook-form";
 import CustomFormField from './CustomFormField';
 import { authFormSchema } from '@/lib/utils';
-import { Loader } from 'lucide-react';
 import SpinnerLoader from './SpinnerLoader';
 
 const AuthForm = ({ type }: { type: string }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const formSchema = authFormSchema(type);
     // 1. Define your form.
-    const form = useForm<z.infer<typeof authFormSchema>>({
-        resolver: zodResolver(authFormSchema),
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
             password: "",
@@ -27,7 +27,7 @@ const AuthForm = ({ type }: { type: string }) => {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof authFormSchema>) {
+    function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
@@ -68,12 +68,78 @@ const AuthForm = ({ type }: { type: string }) => {
                 <>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            {type === 'sign-up' && (
+                                <>
+                                    <div className='flex gap-4'>
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='First Name'
+                                            placeholder='Enter your first name'
+                                            name='firstName'
+                                            type='text'
+                                        />
+
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='Last Name'
+                                            placeholder='Enter your last name'
+                                            name='lastName'
+                                            type='text'
+                                        />
+                                    </div>
+
+                                    <CustomFormField
+                                        control={form.control}
+                                        label='Address'
+                                        placeholder='Enter your address'
+                                        name='address1'
+                                        type='text'
+                                    />
+
+                                    <div className='flex gap-4'>
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='State'
+                                            placeholder='ex: NY'
+                                            name='state'
+                                            type='text'
+                                        />
+
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='Postal Code'
+                                            placeholder='ex: 11101'
+                                            name='postalCode'
+                                            type='text'
+                                        />
+                                    </div>
+
+                                    <div className='flex gap-4'>
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='Date of Birth'
+                                            placeholder='yyyy-mm-dd'
+                                            name='dateOfBirth'
+                                            type='datetime'
+                                        />
+
+                                        <CustomFormField
+                                            control={form.control}
+                                            label='SSN'
+                                            placeholder='ex: 1234'
+                                            name='ssn'
+                                            type='text'
+                                        />
+                                    </div>
+                                </>
+                            )}
+
                             <CustomFormField
                                 control={form.control}
                                 label='Email'
                                 placeholder='Enter your email'
                                 name='email'
-                                type='text'
+                                type='email'
                             />
 
                             <CustomFormField
@@ -87,11 +153,9 @@ const AuthForm = ({ type }: { type: string }) => {
                             <div className='flex flex-col gap-4'>
                                 <Button type="submit" className='form-btn' disabled={isLoading}>
                                     {isLoading ? (
-                                        <>
-                                            <SpinnerLoader type={type} />
-                                            {/* <Loader className='animate-spin' /> 
-                                        {type === 'sign-in' ? 'Signing in...' : 'Signing up...'} */}
-                                        </>
+
+                                        <SpinnerLoader type={type} />
+
                                     ) : type === 'sign-in' ? 'Sign In' : 'Sign Up'}
                                 </Button>
                             </div>
