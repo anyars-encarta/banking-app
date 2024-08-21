@@ -11,8 +11,12 @@ import { useForm } from "react-hook-form";
 import CustomFormField from './CustomFormField';
 import { authFormSchema } from '@/lib/utils';
 import SpinnerLoader from './SpinnerLoader';
+import { useRouter } from 'next/navigation';
+import { getLoggedInUser, signUp } from '@/lib/actions/user.actions';
+import SignIn from '@/app/(auth)/sign-in/page';
 
 const AuthForm = ({ type }: { type: string }) => {
+    const router = useRouter();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -21,18 +25,46 @@ const AuthForm = ({ type }: { type: string }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            firstName: "",
+            lastName: "",
+            address1: "",
+            city: "",
+            state: "",
+            postalCode: "",
+            dateOfBirth: "",
+            ssn: "",
             email: "",
             password: "",
         },
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true);
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-        setIsLoading(false);
+        console.log(isLoading)
+        console.log(data)
+
+        try {
+            // Sign-up with appwrite & create a plaid link token
+            if (type === 'sign-up') {
+                const newUser = await signUp(data);
+
+                setUser(newUser)
+            }
+
+            if (type === 'sign-in') {
+                // const response = await SignIn({
+                //     email: data.email,
+                //     password: data.password,
+                // })
+
+                // if (response) router.push('/');
+            }
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -77,6 +109,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             placeholder='Enter your first name'
                                             name='firstName'
                                             type='text'
+                                            id='firstName'
                                         />
 
                                         <CustomFormField
@@ -85,6 +118,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             placeholder='Enter your last name'
                                             name='lastName'
                                             type='text'
+                                            id='lastName'
                                         />
                                     </div>
 
@@ -94,6 +128,16 @@ const AuthForm = ({ type }: { type: string }) => {
                                         placeholder='Enter your address'
                                         name='address1'
                                         type='text'
+                                        id='address1'
+                                    />
+
+                                    <CustomFormField
+                                        control={form.control}
+                                        label='City'
+                                        placeholder='Enter your city'
+                                        name='city'
+                                        type='text'
+                                        id='city'
                                     />
 
                                     <div className='flex gap-4'>
@@ -103,6 +147,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             placeholder='ex: NY'
                                             name='state'
                                             type='text'
+                                            id='state'
                                         />
 
                                         <CustomFormField
@@ -111,6 +156,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             placeholder='ex: 11101'
                                             name='postalCode'
                                             type='text'
+                                            id='postalCode'
                                         />
                                     </div>
 
@@ -120,7 +166,8 @@ const AuthForm = ({ type }: { type: string }) => {
                                             label='Date of Birth'
                                             placeholder='yyyy-mm-dd'
                                             name='dateOfBirth'
-                                            type='datetime'
+                                            type='text'
+                                            id='dateOfBirth'
                                         />
 
                                         <CustomFormField
@@ -129,6 +176,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                             placeholder='ex: 1234'
                                             name='ssn'
                                             type='text'
+                                            id='ssn'
                                         />
                                     </div>
                                 </>
@@ -140,6 +188,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                 placeholder='Enter your email'
                                 name='email'
                                 type='email'
+                                id='email'
                             />
 
                             <CustomFormField
@@ -148,6 +197,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                 placeholder='Enter your password'
                                 name='password'
                                 type='password'
+                                id='password'
                             />
 
                             <div className='flex flex-col gap-4'>
