@@ -12,8 +12,7 @@ import CustomFormField from './CustomFormField';
 import { authFormSchema } from '@/lib/utils';
 import SpinnerLoader from './SpinnerLoader';
 import { useRouter } from 'next/navigation';
-import { getLoggedInUser, signUp } from '@/lib/actions/user.actions';
-import SignIn from '@/app/(auth)/sign-in/page';
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions';
 
 const AuthForm = ({ type }: { type: string }) => {
     const router = useRouter();
@@ -41,7 +40,7 @@ const AuthForm = ({ type }: { type: string }) => {
     // 2. Define a submit handler.
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true);
-        console.log(isLoading)
+
         try {
             // Sign-up with appwrite & create a plaid link token
             if (type === 'sign-up') {
@@ -51,7 +50,8 @@ const AuthForm = ({ type }: { type: string }) => {
             }
 
             if (type === 'sign-in') {
-                const response = SignIn({
+                
+                const response = await signIn({
                     email: data.email,
                     password: data.password,
                 })
