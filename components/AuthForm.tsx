@@ -1,11 +1,34 @@
 'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useState } from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button"
+import { Form } from "@/components/ui/form"
+import { useForm } from "react-hook-form";
+import CustomFormField from './CustomFormField';
+import { authFormSchema } from '@/lib/utils';
 
 const AuthForm = ({ type }: { type: string }) => {
     const [user, setUser] = useState(null);
+
+    // 1. Define your form.
+    const form = useForm<z.infer<typeof authFormSchema>>({
+        resolver: zodResolver(authFormSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    })
+
+    // 2. Define a submit handler.
+    function onSubmit(values: z.infer<typeof authFormSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        console.log(values)
+    }
 
     return (
         <section className='auth-form'>
@@ -36,9 +59,29 @@ const AuthForm = ({ type }: { type: string }) => {
                 <div className='flex flex-col gap-4'>
                     {/* PlaidLink */}
                 </div>
-            ):(
+            ) : (
                 <>
-                 FORM
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <CustomFormField
+                                control={form.control}
+                                label='Email'
+                                placeholder='Enter your email'
+                                name='email'
+                                type='text'
+                            />
+
+                            <CustomFormField
+                                control={form.control}
+                                label='Password'
+                                placeholder='Enter your password'
+                                name='password'
+                                type='password'
+                            />
+
+                            <Button type="submit">Submit</Button>
+                        </form>
+                    </Form>
                 </>
             )}
         </section>
