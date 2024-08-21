@@ -10,9 +10,12 @@ import { Form } from "@/components/ui/form"
 import { useForm } from "react-hook-form";
 import CustomFormField from './CustomFormField';
 import { authFormSchema } from '@/lib/utils';
+import { Loader } from 'lucide-react';
+import SpinnerLoader from './SpinnerLoader';
 
 const AuthForm = ({ type }: { type: string }) => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof authFormSchema>>({
@@ -25,9 +28,11 @@ const AuthForm = ({ type }: { type: string }) => {
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof authFormSchema>) {
+        setIsLoading(true);
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+        setIsLoading(false);
     }
 
     return (
@@ -79,7 +84,15 @@ const AuthForm = ({ type }: { type: string }) => {
                                 type='password'
                             />
 
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" className='form-btn' disabled={isLoading}>
+                                {isLoading ? (
+                                    <>
+                                        <SpinnerLoader type={type} />
+                                        {/* <Loader className='animate-spin' /> 
+                                        {type === 'sign-in' ? 'Signing in...' : 'Signing up...'} */}
+                                    </>
+                                ) : type === 'sign-in' ? 'Sign In' : 'Sign Up'}
+                            </Button>
                         </form>
                     </Form>
                 </>
