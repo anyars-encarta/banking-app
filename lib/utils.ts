@@ -195,7 +195,17 @@ export const getTransactionStatus = (date: Date) => {
   return date > twoDaysAgo ? "Processing" : "Success";
 };
 
-export const authFormSchema = z.object({
+export const authFormSchema = (type: string) => z.object({
+  // SIGN UP
+  firstName: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50),
+  lastName: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50),
+  address1: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50).optional(),
+  state: type === 'sign-in' ? z.string().optional() : z.string().min(2).max(2),
+  postalCode: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(6),
+  dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+  ssn: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+
+  // SIGN UP & SIGN IN
   email: z.string().email(),
-  password: z.string().min(8, {message: 'Password cannot be empty'})
+  password: z.string().min(8, {message: 'Password cannot be empty'}),
 })
