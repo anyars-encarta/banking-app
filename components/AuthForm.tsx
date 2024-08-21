@@ -42,8 +42,6 @@ const AuthForm = ({ type }: { type: string }) => {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true);
         console.log(isLoading)
-        console.log(data)
-
         try {
             // Sign-up with appwrite & create a plaid link token
             if (type === 'sign-up') {
@@ -53,12 +51,12 @@ const AuthForm = ({ type }: { type: string }) => {
             }
 
             if (type === 'sign-in') {
-                // const response = await SignIn({
-                //     email: data.email,
-                //     password: data.password,
-                // })
+                const response = SignIn({
+                    email: data.email,
+                    password: data.password,
+                })
 
-                // if (response) router.push('/');
+                if (response) router.push('/');
             }
         } catch (e) {
             console.log(e)
@@ -203,9 +201,7 @@ const AuthForm = ({ type }: { type: string }) => {
                             <div className='flex flex-col gap-4'>
                                 <Button type="submit" className='form-btn' disabled={isLoading}>
                                     {isLoading ? (
-
                                         <SpinnerLoader type={type} />
-
                                     ) : type === 'sign-in' ? 'Sign In' : 'Sign Up'}
                                 </Button>
                             </div>
