@@ -37,10 +37,10 @@ export const signIn = async ({ email, password }: signInProps) => {
 
         const session = await account.createEmailPasswordSession(email, password);
 
-        cookies().set('appwrite-session', session.secret, {
-            path: '/',
+        cookies().set("appwrite-session", session.secret, {
+            path: "/",
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: "strict",
             secure: true,
         });
 
@@ -53,7 +53,7 @@ export const signIn = async ({ email, password }: signInProps) => {
 
 }
 
-export const signUp = async ({password, ...userData}: SignUpParams) => {
+export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
     let newUserAccount;
 
@@ -74,7 +74,7 @@ export const signUp = async ({password, ...userData}: SignUpParams) => {
             type: 'personal'
         })
 
-        if(!dwollaCustomerUrl) throw new Error('Error creating dwolla customer');
+        if (!dwollaCustomerUrl) throw new Error('Error creating dwolla customer');
 
         const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
 
@@ -109,7 +109,9 @@ export const signUp = async ({password, ...userData}: SignUpParams) => {
 export async function getLoggedInUser() {
     try {
         const { account } = await createSessionClient();
-        const user = await account.get();
+        const result = await account.get();
+
+        const user = await getUserInfo({ userId: result.$id })
 
         return parseStringify(user)
     } catch (error) {
@@ -134,7 +136,7 @@ export const createLinkToken = async (user: User) => {
             user: {
                 client_user_id: user.$id
             },
-            client_name: user.name,
+            client_name: user.firstName + user.lastName,
             products: ['auth'] as Products[],
             language: 'en',
             country_codes: ['US'] as CountryCode[],
@@ -144,7 +146,8 @@ export const createLinkToken = async (user: User) => {
 
         return parseStringify({ linkToken: res.data.link_token })
     } catch (e) {
-        console.log(e)
+        console.log("An error occurred while creating a new Horizon user:",
+      e)
     }
 }
 
@@ -154,7 +157,7 @@ export const createBankAccount = async ({
     accountId,
     accessToken,
     fundingSourceUrl,
-    sharableId, }: createBankAccountProps) => {
+    shareableId, }: createBankAccountProps) => {
     try {
         const { database } = await createAdminClient();
 
@@ -168,7 +171,7 @@ export const createBankAccount = async ({
                 accountId,
                 accessToken,
                 fundingSourceUrl,
-                sharableId
+                shareableId
             }
         )
 
@@ -227,7 +230,7 @@ export const exchangePublicToken = async ({
             accountId: accountData.account_id,
             accessToken,
             fundingSourceUrl,
-            sharableId: encryptId(accountData.account_id),
+            shareableId: encryptId(accountData.account_id),
         });
 
         // Revalidate the path to reflect the changes
@@ -240,5 +243,37 @@ export const exchangePublicToken = async ({
     } catch (error) {
         // Log any errors that occur during the process
         console.error("An error occurred while creating exchanging token:", error);
+    }
+};
+
+export const getBanks = async ({ userId }: getBanksProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        const banks = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [Query.equal('userId', [userId])]
+        )
+
+        return parseStringify(banks.documents);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getBank = async ({ documentId }: getBankProps) => {
+    try {
+        const { database } = await createAdminClient();
+
+        const bank = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [Query.equal('$id', [documentId])]
+        )
+
+        return parseStringify(bank.documents[0]);
+    } catch (e) {
+        console.log(e);
     }
 };
