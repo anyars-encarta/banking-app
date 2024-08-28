@@ -11,7 +11,7 @@ const RecentTransactions = ({
   appwriteItemId,
   page = 1
 }: RecentTransactionsProps) => {
-  console.log(accounts)
+  console.log(transactions)
   return (
     <section className='recent-transactions'>
       <header className='flex items-center justify-between'>
