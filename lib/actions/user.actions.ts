@@ -53,7 +53,7 @@ export const signIn = async ({ email, password }: signInProps) => {
 
 }
 
-export const signUp = async (userData: SignUpParams) => {
+export const signUp = async ({password, ...userData}: SignUpParams) => {
 
     let newUserAccount;
 
@@ -63,7 +63,7 @@ export const signUp = async (userData: SignUpParams) => {
         newUserAccount = await account.create(
             ID.unique(),
             userData.email,
-            userData.password,
+            password,
             `${userData.firstName} ${userData.lastName}`
         );
 
@@ -90,7 +90,7 @@ export const signUp = async (userData: SignUpParams) => {
             }
         )
 
-        const session = await account.createEmailPasswordSession(userData.email, userData.password);
+        const session = await account.createEmailPasswordSession(userData.email, password);
 
         cookies().set("appwrite-session", session.secret, {
             path: "/",
