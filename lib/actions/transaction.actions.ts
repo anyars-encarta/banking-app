@@ -25,8 +25,8 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
     )
 
     return parseStringify(newTransaction);
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    console.log(e);
   }
 }
 

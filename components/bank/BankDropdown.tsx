@@ -22,7 +22,7 @@ export const BankDropdown = ({
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selected, setSeclected] = useState(accounts[0]);
-console.log(accounts)
+
   const handleBankChange = (id: string) => {
     const account = accounts.find((account) => account.appwriteItemId === id)!;
 
@@ -45,7 +45,7 @@ console.log(accounts)
       onValueChange={(value) => handleBankChange(value)}
     >
       <SelectTrigger
-        className={`flex w-full gap-3 md:w-[300px] ${otherStyles}`}
+        className={`flex w-full bg-white gap-3 md:w-[300px] ${otherStyles}`}
       >
         <Image
           src="icons/credit-card.svg"
@@ -56,7 +56,7 @@ console.log(accounts)
         <p className="line-clamp-1 w-full text-left">{selected.name}</p>
       </SelectTrigger>
       <SelectContent
-        className={`w-full md:w-[300px] ${otherStyles}`}
+        className={`w-full bg-white md:w-[300px] ${otherStyles}`}
         align="end"
       >
         <SelectGroup>
