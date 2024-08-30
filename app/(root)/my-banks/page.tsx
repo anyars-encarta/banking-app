@@ -12,8 +12,6 @@ const MyBanks = async ({ searchParams: { id, page } }: SearchParamProps) => {
 
   if (!accounts) return;
 
-  console.log(accounts.data)
-
   return (
     <section className='flex'>
       <div className='my-banks'>

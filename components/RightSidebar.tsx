@@ -1,9 +1,12 @@
+'use client';
+
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import BankCard from './BankCard'
 import { countTransactionCategories } from '@/lib/utils'
 import Category from './Category'
+import PlaidLink from './PlaidLink';
 
 const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
     const categories: CategoryCount[] = countTransactionCategories(transactions);
@@ -28,18 +31,28 @@ const RightSidebar = ({ user, transactions, banks }: RightSidebarProps) => {
             </section>
 
             <section className='banks'>
-                <div className='flex w-full justify-between'>
+                <div className='flex w-full justify-between items-center'>
                     <h2 className='header-2'>My Banks</h2>
-                    <Link href='/' className='flex gap-2'>
-                        <Image
+                    {/* <Link href='/' className='flex gap-2'> */}
+                    {/* <Image
                             src='/icons/plus.svg'
                             width={20}
                             height={20}
                             alt='plus'
-                        />
+                        /> */}
 
+                    {/* <h2 className='text-14 font-semibold text-gray-600'>Add Bank</h2> */}
+                    {user ? (
+                        <PlaidLink
+                            user={user}
+                            src='icons/plus.svg'
+                            variant='ghost'
+                            type='add-bank'
+                        />
+                    ) : (
                         <h2 className='text-14 font-semibold text-gray-600'>Add Bank</h2>
-                    </Link>
+                    )}
+                    {/* </Link> */}
                 </div>
 
                 {banks?.length > 0 && (

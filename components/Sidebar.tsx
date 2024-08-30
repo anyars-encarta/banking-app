@@ -46,7 +46,10 @@ const Sidebar = ({ user }: SiderbarProps) => {
                     )
                 })}
 
-                <PlaidLink user={user}/>
+                <PlaidLink
+                    user={user}
+                    src='icons/connect-bank.svg'
+                />
             </nav>
 
             <Footer user={user} />
