@@ -6,6 +6,7 @@ import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from 'react-plaid-li
 import { useRouter } from 'next/navigation';
 import { createLinkToken, exchangePublicToken } from '@/lib/actions/user.actions';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const PlaidLink = ({ user, variant, src, type }: PlaidLinkProps) => {
     const router = useRouter();
@@ -51,7 +52,7 @@ const PlaidLink = ({ user, variant, src, type }: PlaidLinkProps) => {
             ) : variant === 'ghost' ? (
                 <Button onClick={() => open()} variant='ghost' className={`${type === 'add-bank' ? 'flex gap-2 text-14 font-semibold text-gray-600' : 'plaidlink-ghost'}`}>
                     <Image src={src || ''} alt='add bank' width={24} height={24}/>
-                    <p className='hidden text-[16px] font-semibold text-black-2 xl:block'>Add Bank</p>
+                    <p className={cn(`hidden text-[16px] font-semibold xl:block`, {"text-blue-600": type === 'add-bank'})}>Add Bank</p>
                 </Button>
             ) : (
                 <Button onClick={() => open()} className='plaidlink-default'>
