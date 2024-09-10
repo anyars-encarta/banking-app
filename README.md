@@ -39,7 +39,7 @@
 <!-- INTRO -->
 # 📖 Horizon<a name="about-project"></a>
 
-> Horizon is a banking app that allows customers to link multiple bank accounts in a single app. Users are also able to make transfers between banks. It was built with Next.js, Shadcn, Tawilwind CSS, Dwolla, Appwrite, chart.js, and Plaid.
+> Horizon is a banking app that allows customers to link multiple bank accounts in a single app. Users are also able to make transfers between banks. It was built with Next.js, Shadcn, Tawilwind CSS, Dwolla, Appwrite, Chart.js, and Plaid.
 
 ## 🛠 Built With <a name="built-with"></a>
 1. React
